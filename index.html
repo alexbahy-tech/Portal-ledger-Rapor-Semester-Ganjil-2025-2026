@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Ledger & Rapor - SMKN 1 Maluku Tengah</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 30%, #0059b3 60%, #ffd700 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            min-height: 600px;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 50%, #ffd700 100%);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: white;
+            padding: 10px;
+            object-fit: contain;
+        }
+
+        .left-panel h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .left-panel p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .icon-lock {
+            font-size: 60px;
+            margin: 30px 0;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #003d7a;
+            box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #999;
+        }
+
+        .role-select {
+            margin-bottom: 25px;
+        }
+
+        .role-select select {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .role-select select:focus {
+            border-color: #003d7a;
+            box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #001f3f 0%, #003d7a 50%, #ffd700 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 61, 122, 0.4);
+        }
+
+        .forgot-password {
+            text-align: center;
+            color: #003d7a;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #ffd700;
+        }
+
+        .security-notice {
+            background: #f8f9fa;
+            border-left: 4px solid #003d7a;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .security-notice p {
+            color: #555;
+            font-size: 12px;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid #c33;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .left-panel {
+                padding: 30px 20px;
+            }
+
+            .left-panel h1 {
+                font-size: 22px;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .icon-lock {
+                font-size: 40px;
+                margin: 20px 0;
+            }
+
+            .right-panel {
+                padding: 30px 20px;
+            }
+
+            .back-button {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://alexbahy-tech.github.io/smartkurikulum-center/" class="back-button">← Kembali ke SmartKurikulum Center</a>
+
+    <div class="container">
+        <div class="left-panel">
+            <img src="https://iili.io/fWsJpHv.jpg" alt="Logo SMKN 1 Maluku Tengah" class="logo">
+            <h1>🔐 Portal Ledger & Rapor</h1>
+            <p>Sistem Akses Aman Data Akademik Kelas</p>
+            <div class="icon-lock">📘</div>
+        </div>
+
+        <div class="right-panel">
+            <div class="login-header">
+                <h2>Selamat Datang</h2>
+                <p>Akses Data Nilai dan Rapor Kelas</p>
+            </div>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <form id="loginForm">
+                <div class="form-group role-select">
+                    <label>👤 Role Pengguna</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🧑‍💼</span>
+                        <select id="roleSelect" required>
+                            <option value="">-- Pilih Role --</option>
+                            <option value="wali">Wali Kelas</option>
+                            <option value="admin">Admin Kurikulum</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="classSelectGroup" style="display: none;">
+                    <label>📚 Pilih Kelas</label>
+                    <div class="input-wrapper">
+                        <select id="classSelect" style="padding: 15px;">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="xmplb">X MPLB</option>
+                            <option value="xakl">X AKL</option>
+                            <option value="xpms">X PMS</option>
+                            <option value="xulp">X ULP</option>
+                            <option value="xtjkt1">X TJKT 1</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>👤 Username</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="username" placeholder="Masukkan username" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="password" placeholder="Masukkan password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">Masuk</button>
+                <a href="#" class="forgot-password">Lupa Password?</a>
+
+                <div class="security-notice">
+                    <p>
+                        🔐 <strong>Data dilindungi dan hanya dapat diakses oleh pengguna berwenang.</strong>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>SMKN 1 Maluku Tengah</strong></p>
+        <p>© 2025 Sistem Informasi Akademik</p>
+    </div>
+
+    <script>
+        const loginData = {
+            wali: {
+                xmplb: {
+                    username: '197811202008012018',
+                    password: 'SMKBisaHebat',
+                    url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xmplb/'
+                },
+                xakl: {
+                    username: '197208192003122010',
+                    password: 'SMKBisaHebat',
+                    url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xakl/'
+                },
+                xpms: {
+                    username: '198004072005012016',
+                    password: 'SMKBisaHebat',
+                    url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xpms/'
+                },
+                xulp: {
+                    username: 'walkes_ulp',
+                    password: 'SMKBisaHebat',
+                    url: 'https://alexbahy-tech.github.io/ledger-dan-rapor-XULP/'
+                },
+                xtjkt1: {
+                    username: '198304262011011007',
+                    password: 'SMKBisaHebat',
+                    url: 'https://alexbahy-tech.github.io/ledger-dan-rapor-XTJKT1/'
+                }
+            },
+            admin: {
+                username: '197408262003121005',
+                password: 'SMKBisaHebat',
+                url: 'https://alexbahy-tech.github.io/smartkurikulum-center/'
+            }
+        };
+
+        const roleSelect = document.getElementById('roleSelect');
+        const classSelectGroup = document.getElementById('classSelectGroup');
+        const classSelect = document.getElementById('classSelect');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        roleSelect.addEventListener('change', function() {
+            if (this.value === 'wali') {
+                classSelectGroup.style.display = 'block';
+                classSelect.required = true;
+            } else {
+                classSelectGroup.style.display = 'none';
+                classSelect.required = false;
+            }
+            errorMessage.style.display = 'none';
+        });
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const role = roleSelect.value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const kelas = classSelect.value;
+
+            if (role === 'wali') {
+                if (!kelas) {
+                    showError('Silakan pilih kelas terlebih dahulu!');
+                    return;
+                }
+
+                const classData = loginData.wali[kelas];
+                if (username === classData.username && password === classData.password) {
+                    window.location.href = classData.url;
+                } else {
+                    showError('Username atau password salah!');
+                }
+            } else if (role === 'admin') {
+                if (username === loginData.admin.username && password === loginData.admin.password) {
+                    window.location.href = loginData.admin.url;
+                } else {
+                    showError('Username atau password salah!');
+                }
+            } else {
+                showError('Silakan pilih role pengguna terlebih dahulu!');
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
