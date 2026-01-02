@@ -180,6 +180,53 @@
             box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
         }
 
+        .class-display {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f7 100%);
+            border: 2px solid #003d7a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .class-display-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .class-display-icon {
+            font-size: 24px;
+        }
+
+        .class-display-text {
+            flex: 1;
+        }
+
+        .class-display-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .class-display-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #003d7a;
+        }
+
         .btn-login {
             width: 100%;
             padding: 15px;
@@ -197,6 +244,12 @@
         .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 61, 122, 0.4);
+        }
+
+        .btn-login:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .forgot-password {
@@ -250,6 +303,17 @@
             border-left: 4px solid #c33;
         }
 
+        .success-message {
+            background: #efe;
+            color: #2a7;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid #2a7;
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -287,7 +351,7 @@
     </style>
 </head>
 <body>
-    <a href="https://alexbahy-tech.github.io/smartkurikulum-center/" class="back-button">← Kembali ke SmartKurikulum Center</a>
+    <a href="https://alexbahy-tech.github.io/smartkurikulumsmkn1mt/" class="back-button">← Kembali ke SmartKurikulum Center</a>
 
     <div class="container">
         <div class="left-panel">
@@ -304,6 +368,7 @@
             </div>
 
             <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
 
             <form id="loginForm">
                 <div class="form-group role-select">
@@ -314,20 +379,6 @@
                             <option value="">-- Pilih Role --</option>
                             <option value="wali">Wali Kelas</option>
                             <option value="admin">Admin Kurikulum</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group" id="classSelectGroup" style="display: none;">
-                    <label>📚 Pilih Kelas</label>
-                    <div class="input-wrapper">
-                        <select id="classSelect" style="padding: 15px;">
-                            <option value="">-- Pilih Kelas --</option>
-                            <option value="xmplb">X MPLB</option>
-                            <option value="xakl">X AKL</option>
-                            <option value="xpms">X PMS</option>
-                            <option value="xulp">X ULP</option>
-                            <option value="xtjkt1">X TJKT 1</option>
                         </select>
                     </div>
                 </div>
@@ -348,7 +399,17 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-login">Masuk</button>
+                <div id="classDisplay" class="class-display">
+                    <div class="class-display-content">
+                        <div class="class-display-icon">📚</div>
+                        <div class="class-display-text">
+                            <div class="class-display-label">Kelas yang Anda ampu:</div>
+                            <div class="class-display-name" id="className">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login" id="btnLogin">Masuk</button>
                 <a href="#" class="forgot-password">Lupa Password?</a>
 
                 <div class="security-notice">
@@ -368,84 +429,131 @@
     <script>
         const loginData = {
             wali: {
-                xmplb: {
-                    username: '197811202008012018',
+                '197811202008012018': {
                     password: 'SMKBisaHebat',
+                    kelas: 'X MPLB',
                     url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xmplb/'
                 },
-                xakl: {
-                    username: '197208192003122010',
+                '197208192003122010': {
                     password: 'SMKBisaHebat',
+                    kelas: 'X AKL',
                     url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xakl/'
                 },
-                xpms: {
-                    username: '198004072005012016',
+                '198004072005012016': {
                     password: 'SMKBisaHebat',
+                    kelas: 'X PMS',
                     url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xpms/'
                 },
-                xulp: {
-                    username: 'walkes_ulp',
+                'walkes_ulp': {
                     password: 'SMKBisaHebat',
+                    kelas: 'X ULP',
                     url: 'https://alexbahy-tech.github.io/ledger-dan-rapor-XULP/'
                 },
-                xtjkt1: {
-                    username: '198304262011011007',
+                '198304262011011007': {
                     password: 'SMKBisaHebat',
+                    kelas: 'X TJKT 1',
                     url: 'https://alexbahy-tech.github.io/ledger-dan-rapor-XTJKT1/'
                 }
             },
             admin: {
-                username: '197408262003121005',
-                password: 'SMKBisaHebat',
-                url: 'https://alexbahy-tech.github.io/porta-admin-kurikulum/'
+                '197408262003121005': {
+                    password: 'SMKBisaHebat',
+                    url: 'https://alexbahy-tech.github.io/porta-admin-kurikulum/'
+                }
             }
         };
 
         const roleSelect = document.getElementById('roleSelect');
-        const classSelectGroup = document.getElementById('classSelectGroup');
-        const classSelect = document.getElementById('classSelect');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const classDisplay = document.getElementById('classDisplay');
+        const className = document.getElementById('className');
         const loginForm = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
         const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
 
-        roleSelect.addEventListener('change', function() {
-            if (this.value === 'wali') {
-                classSelectGroup.style.display = 'block';
-                classSelect.required = true;
-            } else {
-                classSelectGroup.style.display = 'none';
-                classSelect.required = false;
-            }
+        let currentUserData = null;
+
+        // Fungsi untuk memvalidasi kredensial dan menampilkan kelas
+        function validateAndShowClass() {
+            const role = roleSelect.value;
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Reset
+            classDisplay.style.display = 'none';
             errorMessage.style.display = 'none';
-        });
+            currentUserData = null;
+
+            if (!role || !username || !password) {
+                return;
+            }
+
+            if (role === 'wali') {
+                const userData = loginData.wali[username];
+                
+                if (userData && password === userData.password) {
+                    // Tampilkan kelas
+                    className.textContent = userData.kelas;
+                    classDisplay.style.display = 'block';
+                    currentUserData = userData;
+                } else if (username && password) {
+                    showError('Username atau password salah!');
+                }
+            } else if (role === 'admin') {
+                const userData = loginData.admin[username];
+                
+                if (userData && password === userData.password) {
+                    currentUserData = userData;
+                    // Admin tidak perlu menampilkan kelas
+                }
+            }
+        }
+
+        // Event listeners untuk input
+        roleSelect.addEventListener('change', validateAndShowClass);
+        usernameInput.addEventListener('input', validateAndShowClass);
+        passwordInput.addEventListener('input', validateAndShowClass);
 
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const role = roleSelect.value;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const kelas = classSelect.value;
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Reset messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            if (!role) {
+                showError('Silakan pilih role pengguna terlebih dahulu!');
+                return;
+            }
 
             if (role === 'wali') {
-                if (!kelas) {
-                    showError('Silakan pilih kelas terlebih dahulu!');
-                    return;
-                }
-
-                const classData = loginData.wali[kelas];
-                if (username === classData.username && password === classData.password) {
-                    window.location.href = classData.url;
+                const userData = loginData.wali[username];
+                
+                if (userData && password === userData.password) {
+                    showSuccess(`Login berhasil! Mengakses kelas ${userData.kelas}...`);
+                    setTimeout(() => {
+                        window.location.href = userData.url;
+                    }, 1500);
                 } else {
                     showError('Username atau password salah!');
                 }
             } else if (role === 'admin') {
-                if (username === loginData.admin.username && password === loginData.admin.password) {
-                    window.location.href = loginData.admin.url;
+                const userData = loginData.admin[username];
+                
+                if (userData && password === userData.password) {
+                    showSuccess('Login berhasil! Mengakses portal admin...');
+                    setTimeout(() => {
+                        window.location.href = userData.url;
+                    }, 1500);
                 } else {
                     showError('Username atau password salah!');
                 }
-            } else {
-                showError('Silakan pilih role pengguna terlebih dahulu!');
             }
         });
 
@@ -456,7 +564,11 @@
                 errorMessage.style.display = 'none';
             }, 3000);
         }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+        }
     </script>
 </body>
-
 </html>
