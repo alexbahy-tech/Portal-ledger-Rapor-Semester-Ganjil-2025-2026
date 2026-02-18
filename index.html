@@ -3,572 +3,944 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Ledger & Rapor - SMKN 1 Maluku Tengah</title>
+    <title>Portal Ledger & Rapor — SMKN 1 Maluku Tengah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --navy: #0a1628;
+            --navy-mid: #0f2347;
+            --blue: #1a3a6b;
+            --blue-light: #2856a3;
+            --gold: #f0b429;
+            --gold-light: #fdd87a;
+            --gold-pale: #fff8e7;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --error: #ef4444;
+            --error-bg: #fef2f2;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 16px rgba(10,22,40,0.08);
+            --shadow-lg: 0 12px 40px rgba(10,22,40,0.16);
+            --shadow-xl: 0 24px 64px rgba(10,22,40,0.24);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
         }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #001f3f 0%, #003d7a 30%, #0059b3 60%, #ffd700 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--navy);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* ─── BACKGROUND ─── */
+        .bg-scene {
+            position: fixed; inset: 0; z-index: 0; overflow: hidden;
+        }
+        .bg-scene::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0a1628 0%, #0f2347 45%, #1a3a6b 75%, #0f2347 100%);
+        }
+        .bg-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.5;
+            animation: orb-float 12s ease-in-out infinite alternate;
+        }
+        .bg-orb-1 { width: 600px; height: 600px; top: -200px; right: -150px; background: radial-gradient(circle, #1a3a6b, transparent 70%); animation-delay: 0s; }
+        .bg-orb-2 { width: 400px; height: 400px; bottom: -100px; left: -100px; background: radial-gradient(circle, #f0b42922, transparent 70%); animation-delay: -4s; }
+        .bg-orb-3 { width: 300px; height: 300px; top: 40%; left: 30%; background: radial-gradient(circle, #2856a322, transparent 70%); animation-delay: -8s; }
+        @keyframes orb-float { from { transform: translate(0,0) scale(1); } to { transform: translate(30px, -20px) scale(1.05); } }
+
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        /* ─── LAYOUT ─── */
+        .page-wrapper {
+            position: relative; z-index: 1;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 0 16px 40px;
         }
 
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        /* ─── TOP BAR ─── */
+        .top-bar {
+            width: 100%; max-width: 1100px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 0;
+            animation: fade-down 0.6s ease both;
         }
-
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
+        .btn-back {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: rgba(255,255,255,0.75);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px);
+            padding: 10px 18px; border-radius: 50px;
+            text-decoration: none; font-size: 13px; font-weight: 600;
+            transition: all 0.25s;
         }
+        .btn-back:hover { background: rgba(255,255,255,0.15); color: white; transform: translateX(-3px); }
+        .btn-guide {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--navy);
+            border: none; cursor: pointer;
+            padding: 10px 20px; border-radius: 50px;
+            font-size: 13px; font-weight: 700;
+            transition: all 0.25s; font-family: inherit;
+        }
+        .btn-guide:hover { transform: scale(1.04); box-shadow: 0 4px 20px rgba(240,180,41,0.4); }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        /* ─── MAIN CARD ─── */
+        .main-card {
+            width: 100%; max-width: 960px;
+            background: rgba(255,255,255,0.98);
+            border-radius: 24px;
+            box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255,255,255,0.1);
+            display: grid; grid-template-columns: 1fr 1fr;
+            min-height: 580px;
             overflow: hidden;
-            max-width: 1000px;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            min-height: 600px;
+            animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
         }
 
-        .left-panel {
-            flex: 1;
-            background: linear-gradient(135deg, #001f3f 0%, #003d7a 50%, #ffd700 100%);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
+        /* ─── LEFT PANEL ─── */
+        .panel-left {
+            background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 50%, var(--blue) 100%);
+            padding: 48px 40px;
+            display: flex; flex-direction: column;
+            justify-content: space-between;
+            position: relative; overflow: hidden;
+        }
+        .panel-left::before {
+            content: '';
+            position: absolute; width: 300px; height: 300px;
+            top: -80px; right: -80px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(240,180,41,0.15), transparent 70%);
+            pointer-events: none;
+        }
+        .panel-left::after {
+            content: '';
+            position: absolute; bottom: -60px; left: -60px;
+            width: 240px; height: 240px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(40,86,163,0.3), transparent 70%);
+            pointer-events: none;
+        }
+        .brand-top { display: flex; align-items: center; gap: 14px; }
+        .brand-logo {
+            width: 56px; height: 56px; border-radius: 14px;
+            background: white; padding: 6px; object-fit: contain;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .brand-text { }
+        .brand-text h3 { color: white; font-size: 14px; font-weight: 700; line-height: 1.3; }
+        .brand-text p { color: rgba(255,255,255,0.55); font-size: 11px; }
+
+        .panel-center { text-align: left; }
+        .panel-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(240,180,41,0.18); border: 1px solid rgba(240,180,41,0.3);
+            color: var(--gold-light); font-size: 11px; font-weight: 700;
+            padding: 5px 12px; border-radius: 50px; margin-bottom: 20px;
+            letter-spacing: 0.06em; text-transform: uppercase;
+        }
+        .panel-heading {
+            font-family: 'Playfair Display', serif;
+            color: white; font-size: 34px; font-weight: 900;
+            line-height: 1.15; margin-bottom: 14px;
+        }
+        .panel-heading span { color: var(--gold); }
+        .panel-subtext { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7; }
+
+        .panel-features { display: flex; flex-direction: column; gap: 10px; }
+        .feature-item {
+            display: flex; align-items: center; gap: 10px;
+            color: rgba(255,255,255,0.75); font-size: 13px;
+        }
+        .feature-dot {
+            width: 28px; height: 28px; border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; flex-shrink: 0;
         }
 
-        .logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 30px;
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        /* ─── RIGHT PANEL (LOGIN FORM) ─── */
+        .panel-right {
+            padding: 48px 44px;
+            display: flex; flex-direction: column; justify-content: center;
             background: white;
-            padding: 10px;
-            object-fit: contain;
         }
-
-        .left-panel h1 {
-            font-size: 28px;
-            margin-bottom: 15px;
-            font-weight: 700;
+        .login-title { margin-bottom: 32px; }
+        .login-title h2 {
+            font-size: 26px; font-weight: 800; color: var(--navy);
+            margin-bottom: 6px;
         }
+        .login-title p { color: var(--gray-400); font-size: 14px; }
 
-        .left-panel p {
-            font-size: 16px;
-            opacity: 0.9;
-            line-height: 1.6;
+        .alert {
+            padding: 13px 16px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 600; display: none;
+            margin-bottom: 20px; align-items: center; gap: 10px;
         }
+        .alert-error { background: var(--error-bg); color: var(--error); border: 1px solid #fecaca; }
+        .alert-success { background: var(--success-bg); color: var(--success); border: 1px solid #a7f3d0; }
+        .alert.show { display: flex; }
 
-        .icon-lock {
-            font-size: 60px;
-            margin: 30px 0;
+        .form-field { margin-bottom: 18px; }
+        .form-label {
+            display: block; font-size: 13px; font-weight: 600;
+            color: var(--gray-600); margin-bottom: 7px;
         }
-
-        .right-panel {
-            flex: 1;
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .login-header h2 {
-            color: #333;
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .input-wrapper input:focus {
-            border-color: #003d7a;
-            box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
-        }
-
+        .input-wrap { position: relative; }
         .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: #999;
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 16px; color: var(--gray-400); pointer-events: none;
+            transition: color 0.2s;
         }
-
-        .role-select {
-            margin-bottom: 25px;
+        .input-wrap input,
+        .input-wrap select {
+            width: 100%; padding: 13px 14px 13px 42px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px; font-family: inherit;
+            background: var(--gray-50); color: var(--gray-800);
+            outline: none; transition: all 0.25s;
+            -webkit-appearance: none;
         }
-
-        .role-select select {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .input-wrap input:focus,
+        .input-wrap select:focus {
+            border-color: var(--blue-light);
             background: white;
+            box-shadow: 0 0 0 4px rgba(40,86,163,0.1);
         }
-
-        .role-select select:focus {
-            border-color: #003d7a;
-            box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
+        .input-wrap input:focus ~ .input-icon,
+        .input-wrap select:focus ~ .input-icon { color: var(--blue-light); }
+        .input-wrap .input-icon { z-index: 1; }
+        .toggle-pwd {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            cursor: pointer; font-size: 16px; color: var(--gray-400);
+            background: none; border: none; transition: color 0.2s;
+            padding: 2px;
         }
+        .toggle-pwd:hover { color: var(--blue-light); }
 
-        .class-display {
-            background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f7 100%);
-            border: 2px solid #003d7a;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 25px;
+        .class-badge {
             display: none;
-            animation: slideDown 0.3s ease;
+            align-items: center; gap: 10px;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 1.5px solid #bfdbfe;
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            animation: slide-in 0.3s ease;
         }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .class-display-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .class-display-icon {
-            font-size: 24px;
-        }
-
-        .class-display-text {
-            flex: 1;
-        }
-
-        .class-display-label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 3px;
-        }
-
-        .class-display-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: #003d7a;
-        }
+        .class-badge.show { display: flex; }
+        .class-badge-icon { font-size: 22px; }
+        .class-badge-info p { font-size: 11px; color: #60a5fa; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .class-badge-info strong { font-size: 16px; font-weight: 800; color: var(--blue); }
 
         .btn-login {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #001f3f 0%, #003d7a 50%, #ffd700 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--blue-light) 100%);
+            color: white; border: none; border-radius: var(--radius-sm);
+            font-size: 15px; font-weight: 700; font-family: inherit;
+            cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            position: relative; overflow: hidden;
         }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 61, 122, 0.4);
+        .btn-login::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            opacity: 0; transition: opacity 0.3s;
         }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,40,0.3); }
+        .btn-login:hover::after { opacity: 0; }
+        .btn-login:active { transform: translateY(0); }
+        .btn-login span { position: relative; z-index: 1; }
+        .btn-login.loading { pointer-events: none; opacity: 0.8; }
 
-        .btn-login:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
+        .form-footer {
+            text-align: center; margin-top: 16px;
+            color: var(--gray-400); font-size: 12px;
         }
+        .form-footer a { color: var(--blue-light); text-decoration: none; font-weight: 600; }
+        .form-footer a:hover { text-decoration: underline; }
 
-        .forgot-password {
-            text-align: center;
-            color: #003d7a;
-            font-size: 14px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .security-note {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xs); padding: 10px 12px;
+            margin-top: 20px;
         }
+        .security-note p { font-size: 11.5px; color: var(--gray-400); line-height: 1.5; }
 
-        .forgot-password:hover {
-            color: #ffd700;
-        }
-
-        .security-notice {
-            background: #f8f9fa;
-            border-left: 4px solid #003d7a;
-            padding: 15px;
-            margin-top: 30px;
-            border-radius: 5px;
-        }
-
-        .security-notice p {
-            color: #555;
-            font-size: 12px;
-            line-height: 1.6;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: white;
-            font-size: 13px;
-        }
-
-        .footer p {
-            margin: 5px 0;
-        }
-
-        .error-message {
-            background: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
+        /* ─── ADMIN DASHBOARD ─── */
+        .admin-layout {
+            width: 100%; max-width: 1100px;
             display: none;
-            border-left: 4px solid #c33;
+            animation: fade-up 0.6s ease both;
         }
+        .admin-layout.show { display: block; }
 
-        .success-message {
-            background: #efe;
-            color: #2a7;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-            border-left: 4px solid #2a7;
+        .admin-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius);
+            padding: 16px 24px;
+            margin-bottom: 24px;
         }
+        .admin-brand { display: flex; align-items: center; gap: 12px; }
+        .admin-brand-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+        .admin-brand-text h3 { font-size: 15px; font-weight: 800; color: white; }
+        .admin-brand-text p { font-size: 12px; color: rgba(255,255,255,0.5); }
+        .admin-actions { display: flex; align-items: center; gap: 10px; }
+        .btn-logout {
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+            color: #f87171; padding: 9px 16px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: all 0.25s; font-family: inherit;
+        }
+        .btn-logout:hover { background: rgba(239,68,68,0.25); }
 
+        .admin-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 16px; margin-bottom: 28px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius); padding: 20px 24px;
+            transition: all 0.25s;
+        }
+        .stat-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .stat-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .stat-value { font-size: 32px; font-weight: 800; color: white; font-family: 'Playfair Display', serif; }
+        .stat-sub { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+        .admin-body {
+            background: rgba(255,255,255,0.98);
+            border-radius: var(--radius);
+            padding: 28px 28px;
+            box-shadow: var(--shadow-xl);
+        }
+        .admin-body-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+        }
+        .admin-body-header h2 { font-size: 20px; font-weight: 800; color: var(--navy); }
+        .search-input-wrap { position: relative; }
+        .search-input-wrap input {
+            padding: 9px 14px 9px 36px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px; font-size: 13px; font-family: inherit;
+            outline: none; background: var(--gray-50);
+            transition: all 0.2s; width: 220px;
+        }
+        .search-input-wrap input:focus { border-color: var(--blue-light); background: white; box-shadow: 0 0 0 3px rgba(40,86,163,0.08); }
+        .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--gray-400); }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px;
+        }
+        .class-card {
+            border: 1.5px solid var(--gray-200);
+            border-radius: 14px; padding: 18px 16px;
+            cursor: pointer; transition: all 0.25s;
+            position: relative; overflow: hidden;
+            background: var(--gray-50);
+        }
+        .class-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--navy), var(--blue-light));
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.3s;
+        }
+        .class-card:hover { border-color: var(--blue-light); background: white; transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .class-card:hover::before { transform: scaleX(1); }
+        .class-card-level {
+            font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--blue-light);
+            margin-bottom: 5px;
+        }
+        .class-card-name { font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+        .class-card-footer {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 11px; color: var(--gray-400);
+        }
+        .class-card-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+
+        .level-section { margin-bottom: 24px; }
+        .level-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.06em; color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+        .level-bar { height: 2px; background: var(--gray-200); margin-bottom: 12px; }
+
+        /* ─── MODAL ─── */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 100;
+            background: rgba(10,22,40,0.7); backdrop-filter: blur(6px);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-overlay.show { display: flex; animation: fade-in 0.2s ease; }
+        .modal-box {
+            background: white; border-radius: 20px;
+            width: 100%; max-width: 860px; max-height: 90vh;
+            overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-xl);
+            animation: modal-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .modal-head {
+            background: linear-gradient(135deg, var(--navy), var(--blue-light));
+            padding: 24px 28px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .modal-head h2 { color: white; font-size: 20px; font-weight: 800; }
+        .modal-close {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: rgba(255,255,255,0.15); border: none; cursor: pointer;
+            color: white; font-size: 20px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+        .modal-tabs {
+            display: flex; border-bottom: 1.5px solid var(--gray-200);
+            padding: 0 28px; background: white; gap: 2px;
+        }
+        .tab-btn {
+            padding: 14px 20px; font-size: 13px; font-weight: 600;
+            color: var(--gray-400); cursor: pointer; background: none; border: none;
+            border-bottom: 2.5px solid transparent; margin-bottom: -1.5px;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .tab-btn.active { color: var(--blue); border-color: var(--blue); }
+        .tab-btn:hover:not(.active) { color: var(--gray-600); }
+        .modal-body { overflow-y: auto; padding: 28px; flex: 1; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .guide-section { margin-bottom: 28px; }
+        .guide-section-title {
+            font-size: 16px; font-weight: 800; color: var(--navy);
+            margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+        }
+        .guide-section p { font-size: 13.5px; color: var(--gray-600); line-height: 1.75; margin-bottom: 10px; }
+
+        .credential-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 14px 0; }
+        .credential-table th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-weight: 700; font-size: 12px; letter-spacing: 0.04em; }
+        .credential-table th:first-child { border-radius: 10px 0 0 0; }
+        .credential-table th:last-child { border-radius: 0 10px 0 0; }
+        .credential-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+        .credential-table tr:last-child td { border-bottom: none; }
+        .credential-table tr:nth-child(even) td { background: var(--gray-50); }
+        .credential-table code { font-family: monospace; background: var(--gray-100); padding: 2px 7px; border-radius: 4px; font-size: 12px; color: var(--blue); }
+
+        .info-box {
+            padding: 14px 16px; border-radius: 10px; margin: 14px 0;
+            display: flex; gap: 12px;
+        }
+        .info-box.gold { background: #fffbeb; border: 1.5px solid #fde68a; }
+        .info-box.blue { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+        .info-box-icon { font-size: 20px; flex-shrink: 0; }
+        .info-box-text { font-size: 13px; color: var(--gray-600); line-height: 1.65; }
+        .info-box-text strong { color: var(--navy); font-weight: 700; }
+
+        .step-list { list-style: none; counter-reset: steps; }
+        .step-item {
+            counter-increment: steps;
+            display: flex; gap: 14px; margin-bottom: 14px;
+        }
+        .step-item::before {
+            content: counter(steps);
+            display: flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+            background: var(--navy); color: white;
+            font-size: 12px; font-weight: 800; margin-top: 2px;
+        }
+        .step-text { font-size: 13.5px; color: var(--gray-600); line-height: 1.7; }
+        .step-text strong { color: var(--navy); }
+
+        /* ─── PAGE FOOTER ─── */
+        .page-footer {
+            text-align: center; padding: 24px 0 0;
+            color: rgba(255,255,255,0.35); font-size: 12px;
+        }
+        .page-footer strong { color: rgba(255,255,255,0.6); }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slide-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modal-in { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                min-height: auto;
-            }
-
-            .left-panel {
-                padding: 30px 20px;
-            }
-
-            .left-panel h1 {
-                font-size: 22px;
-            }
-
-            .logo {
-                width: 80px;
-                height: 80px;
-            }
-
-            .icon-lock {
-                font-size: 40px;
-                margin: 20px 0;
-            }
-
-            .right-panel {
-                padding: 30px 20px;
-            }
-
-            .back-button {
-                position: static;
-                margin-bottom: 20px;
-                display: inline-block;
-            }
+            .main-card { grid-template-columns: 1fr; min-height: auto; }
+            .panel-left { padding: 32px 28px; }
+            .panel-heading { font-size: 26px; }
+            .panel-right { padding: 32px 28px; }
+            .admin-stats { grid-template-columns: 1fr; }
+            .admin-topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .class-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .top-bar { flex-direction: column; gap: 8px; padding: 14px 0; }
+            .class-grid { grid-template-columns: 1fr; }
+            .admin-body-header { flex-direction: column; align-items: flex-start; }
+            .search-input-wrap input { width: 100%; }
+            .modal-tabs { overflow-x: auto; }
         }
     </style>
 </head>
 <body>
-    <a href="https://alexbahy-tech.github.io/smartkurikulumsmkn1mt/" class="back-button">← Kembali ke SmartKurikulum Center</a>
 
-    <div class="container">
-        <div class="left-panel">
-            <img src="https://iili.io/fWsJpHv.jpg" alt="Logo SMKN 1 Maluku Tengah" class="logo">
-            <h1>🔐 Portal Ledger & Rapor</h1>
-            <p>Sistem Akses Aman Data Akademik Kelas</p>
-            <div class="icon-lock">📘</div>
-        </div>
+<div class="bg-scene">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-grid"></div>
+</div>
 
-        <div class="right-panel">
-            <div class="login-header">
-                <h2>Selamat Datang</h2>
-                <p>Akses Data Nilai dan Rapor Kelas</p>
+<div class="page-wrapper">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <a href="https://alexbahy-tech.github.io/smartkurikulumsmkn1mt/" class="btn-back">← Kembali ke SmartKurikulum</a>
+        <button class="btn-guide" onclick="openModal()">📖 Panduan Penggunaan</button>
+    </div>
+
+    <!-- Login Card -->
+    <div class="main-card" id="loginCard">
+        <!-- Left Panel -->
+        <div class="panel-left">
+            <div class="brand-top">
+                <img src="https://iili.io/feI8iaj.md.png" alt="Logo SMKN 1 Maluku Tengah" class="brand-logo">
+                <div class="brand-text">
+                    <h3>SMKN 1 Maluku Tengah</h3>
+                    <p>Sistem Informasi Akademik</p>
+                </div>
             </div>
 
-            <div id="errorMessage" class="error-message"></div>
-            <div id="successMessage" class="success-message"></div>
+            <div class="panel-center">
+                <div class="panel-badge">🔐 Akses Aman</div>
+                <h1 class="panel-heading">Portal<br>Ledger &<br><span>Rapor</span></h1>
+                <p class="panel-subtext">Kelola data akademik kelas dengan mudah, aman, dan efisien.</p>
+            </div>
 
-            <form id="loginForm">
-                <div class="form-group role-select">
-                    <label>👤 Role Pengguna</label>
-                    <div class="input-wrapper">
+            <div class="panel-features">
+                <div class="feature-item">
+                    <div class="feature-dot">📊</div>
+                    <span>Kelola ledger nilai siswa</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot">📄</div>
+                    <span>Unggah & unduh rapor digital</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot">🔒</div>
+                    <span>Data terenkripsi & aman</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel (Form) -->
+        <div class="panel-right">
+            <div class="login-title">
+                <h2>Selamat Datang 👋</h2>
+                <p>Masuk menggunakan akun yang diberikan</p>
+            </div>
+
+            <div id="alertError" class="alert alert-error">
+                ⚠️ <span id="alertErrorText">Username, password, atau role tidak valid!</span>
+            </div>
+            <div id="alertSuccess" class="alert alert-success">
+                ✅ Login berhasil! Memuat dashboard...
+            </div>
+
+            <form id="loginForm" autocomplete="off">
+                <div class="form-field">
+                    <label class="form-label">Role Pengguna</label>
+                    <div class="input-wrap">
                         <span class="input-icon">🧑‍💼</span>
                         <select id="roleSelect" required>
-                            <option value="">-- Pilih Role --</option>
+                            <option value="">— Pilih Role —</option>
                             <option value="wali">Wali Kelas</option>
                             <option value="admin">Admin Kurikulum</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>👤 Username</label>
-                    <div class="input-wrapper">
+                <div class="form-field">
+                    <label class="form-label">Username (NIP / Kode Akses)</label>
+                    <div class="input-wrap">
                         <span class="input-icon">👤</span>
-                        <input type="text" id="username" placeholder="Masukkan username" required>
+                        <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>🔒 Password</label>
-                    <div class="input-wrapper">
+                <div class="form-field">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrap">
                         <span class="input-icon">🔒</span>
-                        <input type="password" id="password" placeholder="Masukkan password" required>
+                        <input type="password" id="password" placeholder="Masukkan password" required id="password">
+                        <button type="button" class="toggle-pwd" id="togglePwd" onclick="togglePassword()">👁️</button>
                     </div>
                 </div>
 
-                <div id="classDisplay" class="class-display">
-                    <div class="class-display-content">
-                        <div class="class-display-icon">📚</div>
-                        <div class="class-display-text">
-                            <div class="class-display-label">Kelas yang Anda ampu:</div>
-                            <div class="class-display-name" id="className">-</div>
-                        </div>
+                <div class="class-badge" id="classBadge">
+                    <div class="class-badge-icon">📚</div>
+                    <div class="class-badge-info">
+                        <p>Kelas yang Anda ampu</p>
+                        <strong id="classBadgeName">—</strong>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-login" id="btnLogin">Masuk</button>
-                <a href="#" class="forgot-password">Lupa Password?</a>
-
-                <div class="security-notice">
-                    <p>
-                        🔐 <strong>Data dilindungi dan hanya dapat diakses oleh pengguna berwenang.</strong>
-                    </p>
-                </div>
+                <button type="submit" class="btn-login" id="btnLogin">
+                    <span>Masuk ke Dashboard</span>
+                    <span>→</span>
+                </button>
             </form>
+
+            <div class="form-footer">
+                <a href="#">Lupa password?</a> &nbsp;·&nbsp; Hubungi admin kurikulum
+            </div>
+
+            <div class="security-note">
+                <span>🛡️</span>
+                <p>Data dilindungi dan hanya dapat diakses oleh pengguna berwenang.</p>
+            </div>
         </div>
     </div>
 
-    <div class="footer">
-        <p><strong>SMKN 1 Maluku Tengah</strong></p>
-        <p>© 2025 Sistem Informasi Akademik</p>
+    <!-- Admin Dashboard -->
+    <div class="admin-layout" id="adminLayout">
+        <div class="admin-topbar">
+            <div class="admin-brand">
+                <div class="admin-brand-icon">🏫</div>
+                <div class="admin-brand-text">
+                    <h3>Admin Kurikulum — SMKN 1 Maluku Tengah</h3>
+                    <p>Portal Manajemen Data Kelas</p>
+                </div>
+            </div>
+            <div class="admin-actions">
+                <button class="btn-logout" onclick="handleLogout()">🚪 Keluar</button>
+            </div>
+        </div>
+
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Kelas</div>
+                <div class="stat-value" id="statTotal">21</div>
+                <div class="stat-sub">Kelas aktif TA 2025/2026</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Wali Kelas</div>
+                <div class="stat-value">21</div>
+                <div class="stat-sub">Guru terdaftar di sistem</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Akses Hari Ini</div>
+                <div class="stat-value">—</div>
+                <div class="stat-sub">Aktivitas real-time</div>
+            </div>
+        </div>
+
+        <div class="admin-body">
+            <div class="admin-body-header">
+                <h2>Daftar Seluruh Kelas</h2>
+                <div class="search-input-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchClass" placeholder="Cari kelas..." oninput="filterClasses()">
+                </div>
+            </div>
+
+            <div id="classContainer"></div>
+        </div>
     </div>
 
-    <script>
-        const loginData = {
-            wali: {
-                '197811202008012018': {
-                    password: 'SMKBisaHebat',
-                    kelas: 'X MPLB',
-                    url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xmplb/'
-                },
-                '197208192003122010': {
-                    password: 'SMKBisaHebat',
-                    kelas: 'X AKL',
-                    url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xakl/'
-                },
-                '198004072005012016': {
-                    password: 'SMKBisaHebat',
-                    kelas: 'X PMS',
-                    url: 'https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xpms/'
-                },
-                'walkes_ulp': {
-                    password: 'SMKBisaHebat',
-                    kelas: 'X ULP',
-                    url: 'https://alexbahy-tech.github.io/ledger-dan-rapor-XULP/'
-                },
-                '198304262011011007': {
-                    password: 'SMKBisaHebat',
-                    kelas: 'X TJKT 1',
-                    url: 'https://alexbahy-tech.github.io/ledger-dan-rapor-XTJKT1/'
-                }
-            },
-            admin: {
-                '197408262003121005': {
-                    password: 'SMKBisaHebat',
-                    url: 'https://alexbahy-tech.github.io/porta-admin-kurikulum/'
-                }
-            }
-        };
+    <div class="page-footer">
+        <strong>SMKN 1 Maluku Tengah</strong> &nbsp;·&nbsp; © 2026 Sistem Informasi Akademik
+    </div>
+</div>
 
-        const roleSelect = document.getElementById('roleSelect');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const classDisplay = document.getElementById('classDisplay');
-        const className = document.getElementById('className');
-        const loginForm = document.getElementById('loginForm');
-        const btnLogin = document.getElementById('btnLogin');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
+<!-- Guide Modal -->
+<div class="modal-overlay" id="guideModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h2>📘 Panduan Lengkap Penggunaan</h2>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-login')">🔑 Login</button>
+            <button class="tab-btn" onclick="switchTab('tab-dashboard')">📊 Dashboard</button>
+            <button class="tab-btn" onclick="switchTab('tab-data')">📂 Kelola Data</button>
+        </div>
+        <div class="modal-body">
+            <!-- Tab Login -->
+            <div class="tab-content active" id="tab-login">
+                <div class="guide-section">
+                    <div class="guide-section-title">🔑 Cara Login ke Sistem</div>
+                    <p>Pilih role yang sesuai, kemudian masukkan username (NIP) dan password untuk mengakses portal.</p>
 
-        let currentUserData = null;
+                    <div class="info-box blue">
+                        <div class="info-box-icon">💡</div>
+                        <div class="info-box-text">
+                            <strong>Username untuk Wali Kelas</strong> menggunakan NIP masing-masing guru. Bagi guru tanpa NIP, gunakan format <code>walkes_[kode]</code> (huruf kecil semua), contoh: <code>walkes_ulp</code>, <code>walkes_tjkt2</code>.
+                        </div>
+                    </div>
 
-        // Fungsi untuk memvalidasi kredensial dan menampilkan kelas
-        function validateAndShowClass() {
-            const role = roleSelect.value;
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
+                    <table class="credential-table">
+                        <thead>
+                            <tr><th>Kelas</th><th>Username</th><th>Password</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>X MPLB</td><td><code>197811202008012018</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X AKL</td><td><code>197208192003122010</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X PMS</td><td><code>198004072005012016</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X ULP</td><td><code>walkes_ulp</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X TJKT 1</td><td><code>198304262011011007</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X TJKT 2</td><td><code>walkes_tjkt2</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X TK 1</td><td><code>199402202020121003</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>X TK 2</td><td><code>197604072022211008</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI MPLB</td><td><code>198606052024211003</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI AKL</td><td><code>197902242009042001</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI PMS</td><td><code>19800410202212022</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI ULP</td><td><code>199111122023212034</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI TJKT 1</td><td><code>197202182006042014</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI TJKT 2</td><td><code>198005182009041001</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XI TK</td><td><code>199704272024211004</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XII MPLB</td><td><code>198804202019032021</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XII AKL</td><td><code>19860121202212037</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XII PMS</td><td><code>196701262000082001</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XII ULP</td><td><code>1983011920082014</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XII TJKT</td><td><code>198005162009042008</code></td><td><code>SMKBisaHebat</code></td></tr>
+                            <tr><td>XII TK</td><td><code>197507282007012012</code></td><td><code>SMKBisaHebat</code></td></tr>
+                        </tbody>
+                    </table>
 
-            // Reset
-            classDisplay.style.display = 'none';
-            errorMessage.style.display = 'none';
-            currentUserData = null;
+                    <div class="info-box gold">
+                        <div class="info-box-icon">🔐</div>
+                        <div class="info-box-text">
+                            <strong>Admin Kurikulum</strong><br>
+                            Username: <code>197408262003121005</code> &nbsp; Password: <code>SMKBisaHebat</code><br>
+                            Admin dapat melihat dan mengakses data seluruh kelas.
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            if (!role || !username || !password) {
-                return;
-            }
+            <!-- Tab Dashboard -->
+            <div class="tab-content" id="tab-dashboard">
+                <div class="guide-section">
+                    <div class="guide-section-title">📊 Menggunakan Dashboard E-Rapor</div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-text"><strong>Pilih Mode Kerja</strong><br>Aplikasi memiliki 2 mode: <em>Mode Rapor</em> untuk mengelola data rapor, dan <em>Mode Identitas Siswa</em> untuk mengelola data identitas.</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-text"><strong>Atur Filter Data</strong><br>Pilih Tahun Pelajaran (2025/2026, 2026/2027, atau 2027/2028) dan Semester (Ganjil/Genap), lalu klik <strong>"Cek Status"</strong>.</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-text"><strong>Periksa Status Ledger</strong><br>Sistem menampilkan kelengkapan rapor dan identitas siswa beserta persentasenya secara otomatis.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-            if (role === 'wali') {
-                const userData = loginData.wali[username];
-                
-                if (userData && password === userData.password) {
-                    // Tampilkan kelas
-                    className.textContent = userData.kelas;
-                    classDisplay.style.display = 'block';
-                    currentUserData = userData;
-                } else if (username && password) {
-                    showError('Username atau password salah!');
-                }
-            } else if (role === 'admin') {
-                const userData = loginData.admin[username];
-                
-                if (userData && password === userData.password) {
-                    currentUserData = userData;
-                    // Admin tidak perlu menampilkan kelas
-                }
-            }
+            <!-- Tab Data -->
+            <div class="tab-content" id="tab-data">
+                <div class="guide-section">
+                    <div class="guide-section-title">📂 Mengelola Data Siswa</div>
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <div class="step-text"><strong>Tambah Data Siswa</strong><br>Klik tombol <strong>"Tambah Siswa"</strong> di kanan atas tabel, isi formulir yang muncul dengan lengkap, lalu klik "Simpan".</div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-text"><strong>Unggah File Ledger / Rapor</strong><br>Pada kolom Aksi di tabel siswa, klik <strong>"Upload"</strong>, pilih file PDF yang sesuai, dan tunggu hingga status berubah menjadi "Tersedia".</div>
+                        </li>
+                    </ul>
+                    <div class="info-box gold">
+                        <div class="info-box-icon">⚠️</div>
+                        <div class="info-box-text"><strong>Penting:</strong> Pastikan file yang diunggah dalam format <strong>PDF</strong> dengan ukuran maksimal <strong>2MB</strong> per file agar sistem tetap berjalan optimal.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const userData = {
+        "197811202008012018": { name: "X MPLB",    role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xmplb/" },
+        "197208192003122010": { name: "X AKL",     role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xakl/" },
+        "198004072005012016": { name: "X PMS",     role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-xpms/" },
+        "walkes_ulp":          { name: "X ULP",     role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xulp/" },
+        "198304262011011007": { name: "X TJKT 1",  role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xtjkt1/" },
+        "walkes_tjkt2":        { name: "X TJKT 2",  role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-dan-rapor-XTJKT2/" },
+        "199402202020121003": { name: "X TK 1",    role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-XTK1/" },
+        "197604072022211008": { name: "X TK 2",    role: "wali", level: "X",   url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xtk2/" },
+        "198606052024211003": { name: "XI MPLB",   role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-XIMPLB3/" },
+        "197902242009042001": { name: "XI AKL",    role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiakl/" },
+        "19800410202212022":  { name: "XI PMS",    role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xipms/" },
+        "199111122023212034": { name: "XI ULP",    role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiulp/" },
+        "197202182006042014": { name: "XI TJKT 1", role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xitjkt1/" },
+        "198005182009041001": { name: "XI TJKT 2", role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xitjkt2/" },
+        "199704272024211004": { name: "XI TK",     role: "wali", level: "XI",  url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xitk/" },
+        "198804202019032021": { name: "XII MPLB",  role: "wali", level: "XII", url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiimplb/" },
+        "19860121202212037":  { name: "XII AKL",   role: "wali", level: "XII", url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiiakl/" },
+        "196701262000082001": { name: "XII PMS",   role: "wali", level: "XII", url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiipms/" },
+        "1983011920082014":   { name: "XII ULP",   role: "wali", level: "XII", url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiiulp/" },
+        "198005162009042008": { name: "XII TJKT",  role: "wali", level: "XII", url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiitjkt/" },
+        "197507282007012012": { name: "XII TK",    role: "wali", level: "XII", url: "https://alexbahy-tech.github.io/sistem-upload-ledger-rapor-xiitk/" },
+        "197408262003121005": { name: "Admin Kurikulum", role: "admin", level: null, url: null }
+    };
+
+    const usernameEl = document.getElementById('username');
+    const classBadge = document.getElementById('classBadge');
+    const classBadgeName = document.getElementById('classBadgeName');
+
+    usernameEl.addEventListener('input', e => {
+        const user = userData[e.target.value.trim()];
+        if (user && user.role === 'wali') {
+            classBadgeName.textContent = user.name;
+            classBadge.classList.add('show');
+        } else {
+            classBadge.classList.remove('show');
         }
+    });
 
-        // Event listeners untuk input
-        roleSelect.addEventListener('change', validateAndShowClass);
-        usernameInput.addEventListener('input', validateAndShowClass);
-        passwordInput.addEventListener('input', validateAndShowClass);
+    document.getElementById('loginForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const un = usernameEl.value.trim();
+        const pw = document.getElementById('password').value;
+        const role = document.getElementById('roleSelect').value;
+        const errEl = document.getElementById('alertError');
+        const sucEl = document.getElementById('alertSuccess');
 
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const role = roleSelect.value;
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-
-            // Reset messages
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
-
-            if (!role) {
-                showError('Silakan pilih role pengguna terlebih dahulu!');
-                return;
-            }
-
-            if (role === 'wali') {
-                const userData = loginData.wali[username];
-                
-                if (userData && password === userData.password) {
-                    showSuccess(`Login berhasil! Mengakses kelas ${userData.kelas}...`);
-                    setTimeout(() => {
-                        window.location.href = userData.url;
-                    }, 1500);
+        if (userData[un] && pw === 'SMKBisaHebat' && userData[un].role === role) {
+            errEl.classList.remove('show');
+            sucEl.classList.add('show');
+            const btn = document.getElementById('btnLogin');
+            btn.classList.add('loading');
+            btn.innerHTML = '<span>Mengalihkan ke Dashboard...</span>';
+            setTimeout(() => {
+                if (role === 'admin') {
+                    showAdminDashboard();
+                    sucEl.classList.remove('show');
+                    btn.classList.remove('loading');
+                    btn.innerHTML = '<span>Masuk ke Dashboard</span><span>→</span>';
                 } else {
-                    showError('Username atau password salah!');
+                    window.location.href = userData[un].url;
                 }
-            } else if (role === 'admin') {
-                const userData = loginData.admin[username];
-                
-                if (userData && password === userData.password) {
-                    showSuccess('Login berhasil! Mengakses portal admin...');
-                    setTimeout(() => {
-                        window.location.href = userData.url;
-                    }, 1500);
-                } else {
-                    showError('Username atau password salah!');
-                }
-            }
+            }, 900);
+        } else {
+            sucEl.classList.remove('show');
+            const errText = document.getElementById('alertErrorText');
+            if (!userData[un]) errText.textContent = 'Username tidak ditemukan.';
+            else if (userData[un].role !== role) errText.textContent = 'Role tidak sesuai dengan akun.';
+            else errText.textContent = 'Password salah!';
+            errEl.classList.add('show');
+        }
+    });
+
+    function showAdminDashboard() {
+        document.getElementById('loginCard').style.display = 'none';
+        const layout = document.getElementById('adminLayout');
+        layout.classList.add('show');
+        renderClasses();
+    }
+
+    function renderClasses(filter = '') {
+        const grouped = {};
+        Object.keys(userData).forEach(key => {
+            const u = userData[key];
+            if (u.role !== 'wali') return;
+            if (filter && !u.name.toLowerCase().includes(filter.toLowerCase())) return;
+            if (!grouped[u.level]) grouped[u.level] = [];
+            grouped[u.level].push({ key, ...u });
         });
 
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 3000);
-        }
+        const container = document.getElementById('classContainer');
+        container.innerHTML = '';
+        ['X', 'XI', 'XII'].forEach(level => {
+            if (!grouped[level] || grouped[level].length === 0) return;
+            const sec = document.createElement('div');
+            sec.className = 'level-section';
+            sec.innerHTML = `<div class="level-label"><span>Tingkat ${level}</span></div><div class="level-bar"></div><div class="class-grid" id="grid-${level}"></div>`;
+            container.appendChild(sec);
+            const grid = sec.querySelector('.class-grid');
+            grouped[level].forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'class-card';
+                card.innerHTML = `<div class="class-card-level">Tingkat ${u.level}</div><div class="class-card-name">${u.name}</div><div class="class-card-footer"><span class="class-card-dot"></span> Aktif</div>`;
+                card.onclick = () => window.open(u.url, '_blank');
+                grid.appendChild(card);
+            });
+        });
+        document.getElementById('statTotal').textContent = Object.values(userData).filter(u => u.role === 'wali').length;
+    }
 
-        function showSuccess(message) {
-            successMessage.textContent = message;
-            successMessage.style.display = 'block';
-        }
-    </script>
+    function filterClasses() {
+        renderClasses(document.getElementById('searchClass').value);
+    }
+
+    function handleLogout() {
+        location.reload();
+    }
+
+    function togglePassword() {
+        const pw = document.getElementById('password');
+        const btn = document.getElementById('togglePwd');
+        if (pw.type === 'password') { pw.type = 'text'; btn.textContent = '🙈'; }
+        else { pw.type = 'password'; btn.textContent = '👁️'; }
+    }
+
+    function openModal() {
+        document.getElementById('guideModal').classList.add('show');
+    }
+    function closeModal() {
+        document.getElementById('guideModal').classList.remove('show');
+    }
+    document.getElementById('guideModal').addEventListener('click', e => {
+        if (e.target === document.getElementById('guideModal')) closeModal();
+    });
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+</script>
 </body>
 </html>
